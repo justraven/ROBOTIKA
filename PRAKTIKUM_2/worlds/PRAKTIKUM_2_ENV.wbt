@@ -1,0 +1,27 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5754149375134364 0.5812011068976437 0.5754154351660734 2.0886293185147515
+  position 0.0021219797962780764 -0.0025961482956411886 2.4503244727182234
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+E-puck {
+  translation -0.391771 0.179416 -6.39664e-05
+  rotation 0.0009180349661074861 0.00303825988783187 0.9999949630816424 -5.307179586466759e-06
+  controller "PID_wall_follower"
+}
+Wall {
+  size 0.5 0.5 0.3
+  appearance Roughcast {
+    colorOverride 1 1 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+RectangleArena {
+}

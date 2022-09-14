@@ -1,0 +1,25 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5773499736775937 0.5773507974049262 0.5773500364859934 2.0943989969421293
+  position 1.373844664316449e-06 1.3197023937396236e-06 10.49770502831931
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+}
+E-puck {
+  translation 0.24 0 0
+}
+Wall {
+  size 0.1 0.8 0.5
+  appearance Roughcast {
+    colorOverride 0.666667 0.333333 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}

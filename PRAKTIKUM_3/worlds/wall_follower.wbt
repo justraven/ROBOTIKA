@@ -1,0 +1,112 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5804235255472733 0.5826041724748365 0.5689296170935249 2.10385039723813
+  position -0.07163273475973925 0.07030296566295435 2.221080667164616
+  follow "e-puck"
+  followType "None"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 0.04 0 0
+  floorSize 1.062 1
+  floorTileSize 0.25 0.25
+}
+Wall {
+  translation -0.37 0.28 0
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation -0.19 0.28 0
+  name "wall(4)"
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation 0.23 0.06 0
+  name "wall(14)"
+  size 0.02 0.875 0.1
+}
+Wall {
+  translation 0.38 0 0
+  name "wall(15)"
+  size 0.02 0.75 0.1
+}
+Wall {
+  translation -0.07 0.22 0
+  name "wall(6)"
+  size 0.02 0.3125 0.1
+}
+Wall {
+  translation -0.07 -0.224 0
+  name "wall(12)"
+  size 0.02 0.3125 0.1
+}
+Wall {
+  translation 0.11 0.43 0
+  name "wall(10)"
+  size 0.02 0.125 0.1
+}
+Wall {
+  translation 0.11 0 0
+  name "wall(11)"
+  size 0.02 0.1425 0.1
+}
+Wall {
+  translation -0.19 -0.28 0
+  name "wall(5)"
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation -0.37 -0.28 0
+  name "wall(2)"
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation -0.28 0.07 0
+  name "wall(1)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.02 0.075 0
+  name "wall(7)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.02 0.365 0
+  name "wall(9)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.48 0.37 0
+  name "wall(16)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.48 -0.365 0
+  name "wall(17)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.08 -0.37 0
+  name "wall(13)"
+  size 0.3125 0.02 0.1
+}
+Wall {
+  translation 0.02 -0.075 0
+  name "wall(8)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation -0.28 -0.07 0
+  name "wall(3)"
+  size 0.1875 0.02 0.1
+}
+E-puck {
+  translation -0.432369 -0.42821 -7.20956e-05
+  rotation 0 0 1 1.5708
+  controller "PID_follower"
+}
