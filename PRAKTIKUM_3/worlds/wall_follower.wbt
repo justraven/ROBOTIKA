@@ -1,11 +1,30 @@
-#VRML_SIM R2022a utf8
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/appearances/protos/Roughcast.proto"
+
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5804235255472733 0.5826041724748365 0.5689296170935249 2.10385039723813
-  position -0.07163273475973925 0.07030296566295435 2.221080667164616
+  orientation -0.5773500495284863 0.5773502905388719 0.5773504675014429 2.0943990294905124
+  position 0.04054912929244425 1.2255567154006997e-05 3.219354988453838
   follow "e-puck"
   followType "None"
+}
+Wall {
+  translation 0.5 0.44 -0.00073
+  name "finish"
+  size 0.19 0.22 0.00075
+  appearance Roughcast {
+    colorOverride 0 0 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
 }
 TexturedBackground {
 }
@@ -13,100 +32,101 @@ TexturedBackgroundLight {
 }
 RectangleArena {
   translation 0.04 0 0
-  floorSize 1.062 1
+  floorSize 1.1 1.1
   floorTileSize 0.25 0.25
+  floorAppearance NULL
 }
 Wall {
-  translation -0.37 0.28 0
-  size 0.02 0.4375 0.1
+  translation -0.34 0.31 0
+  size 0.02 0.45 0.1
 }
 Wall {
-  translation -0.19 0.28 0
+  translation -0.16 0.31 0
   name "wall(4)"
-  size 0.02 0.4375 0.1
+  size 0.02 0.45 0.1
 }
 Wall {
-  translation 0.23 0.06 0
+  translation 0.23 0.08 0
   name "wall(14)"
-  size 0.02 0.875 0.1
+  size 0.02 0.92 0.1
 }
 Wall {
-  translation 0.38 0 0
+  translation 0.4 -0.02 0
   name "wall(15)"
-  size 0.02 0.75 0.1
+  size 0.02 0.7 0.1
 }
 Wall {
-  translation -0.07 0.22 0
+  translation -0.02 0.22 0
   name "wall(6)"
   size 0.02 0.3125 0.1
 }
 Wall {
-  translation -0.07 -0.224 0
+  translation -0.02 -0.244 0
   name "wall(12)"
-  size 0.02 0.3125 0.1
+  size 0.02 0.25 0.1
 }
 Wall {
-  translation 0.11 0.43 0
+  translation 0.16 0.47 0
   name "wall(10)"
-  size 0.02 0.125 0.1
+  size 0.02 0.15 0.1
 }
 Wall {
-  translation 0.11 0 0
+  translation 0.16 -0.02 0
   name "wall(11)"
-  size 0.02 0.1425 0.1
+  size 0.02 0.18 0.1
 }
 Wall {
-  translation -0.19 -0.28 0
+  translation -0.16 -0.33 0
   name "wall(5)"
   size 0.02 0.4375 0.1
 }
 Wall {
-  translation -0.37 -0.28 0
+  translation -0.34 -0.33 0
   name "wall(2)"
-  size 0.02 0.4375 0.1
+  size 0.02 0.45 0.1
 }
 Wall {
-  translation -0.28 0.07 0
+  translation -0.25 0.08 0
   name "wall(1)"
   size 0.1875 0.02 0.1
 }
 Wall {
-  translation 0.02 0.075 0
+  translation 0.07 0.075 0
   name "wall(7)"
   size 0.1875 0.02 0.1
 }
 Wall {
-  translation 0.02 0.365 0
+  translation 0.07 0.385 0
   name "wall(9)"
-  size 0.1875 0.02 0.1
+  size 0.19 0.02 0.1
 }
 Wall {
-  translation 0.48 0.37 0
+  translation 0.5 0.32 0
   name "wall(16)"
-  size 0.1875 0.02 0.1
+  size 0.18 0.02 0.1
 }
 Wall {
-  translation 0.48 -0.365 0
+  translation 0.49 -0.375 0
   name "wall(17)"
   size 0.1875 0.02 0.1
 }
 Wall {
-  translation 0.08 -0.37 0
+  translation 0.11 -0.37 0
   name "wall(13)"
-  size 0.3125 0.02 0.1
+  size 0.25 0.02 0.1
 }
 Wall {
-  translation 0.02 -0.075 0
+  translation 0.07 -0.115 0
   name "wall(8)"
   size 0.1875 0.02 0.1
 }
 Wall {
-  translation -0.28 -0.07 0
+  translation -0.25 -0.11 0
   name "wall(3)"
   size 0.1875 0.02 0.1
 }
 E-puck {
-  translation -0.432369 -0.42821 -7.20956e-05
+  translation -0.462233 -0.507373 2.69275e-05
   rotation 0 0 1 1.5708
   controller "PID_follower"
 }

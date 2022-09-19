@@ -1,27 +1,137 @@
-#VRML_SIM R2022a utf8
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/appearances/protos/Roughcast.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/gctronic/e-puck/protos/E-puckGroundSensors.proto"
+
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5754149375134364 0.5812011068976437 0.5754154351660734 2.0886293185147515
-  position 0.0021219797962780764 -0.0025961482956411886 2.4503244727182234
+  orientation -0.5804235255472733 0.5826041724748365 0.5689296170935249 2.10385039723813
+  position -0.07153543927334936 0.09532408156417346 3.471802218860164
+  follow "e-puck"
+  followType "None"
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-E-puck {
-  translation -0.391771 0.179416 -6.39664e-05
-  rotation 0.0009180349661074861 0.00303825988783187 0.9999949630816424 -5.307179586466759e-06
-  controller "PID_wall_follower"
+RectangleArena {
+  translation 0.04 0 0
+  floorSize 1.062 1
+  floorTileSize 0.25 0.25
+  floorAppearance NULL
 }
 Wall {
-  size 0.5 0.5 0.3
+  translation -0.37 0.28 0
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation -0.19 0.28 0
+  name "wall(4)"
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation 0.25 0.04 0
+  name "wall(14)"
+  size 0.02 0.9 0.1
+}
+Wall {
+  translation 0.38 -0.01 0
+  name "wall(15)"
+  size 0.02 0.78 0.1
+}
+Wall {
+  translation -0.07 0.22 0
+  name "wall(6)"
+  size 0.02 0.3125 0.1
+}
+Wall {
+  translation -0.07 -0.234 0
+  name "wall(12)"
+  size 0.02 0.35 0.1
+}
+Wall {
+  translation 0.11 0.44 0
+  name "wall(10)"
+  size 0.02 0.125 0.1
+}
+Wall {
+  translation 0.11 0 0
+  name "wall(11)"
+  size 0.02 0.1425 0.1
+}
+Wall {
+  translation -0.19 -0.28 0
+  name "wall(5)"
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation -0.37 -0.28 0
+  name "wall(2)"
+  size 0.02 0.4375 0.1
+}
+Wall {
+  translation -0.28 0.07 0
+  name "wall(1)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.02 0.065 0
+  name "wall(7)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.02 0.375 0
+  name "wall(9)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.48 0.38 0
+  name "wall(16)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.53 0.45 0
+  name "wall(18)"
+  size 0.1 0.1 7.5e-06
   appearance Roughcast {
-    colorOverride 1 1 0
+    colorOverride 0 0 0
     textureTransform TextureTransform {
       scale 2.4 1
     }
   }
 }
-RectangleArena {
+Wall {
+  translation 0.48 -0.385 0
+  name "wall(17)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation 0.08 -0.4 0
+  name "wall(13)"
+  size 0.3125 0.02 0.1
+}
+Wall {
+  translation 0.02 -0.065 0
+  name "wall(8)"
+  size 0.1875 0.02 0.1
+}
+Wall {
+  translation -0.28 -0.05 0
+  name "wall(3)"
+  size 0.195 0.02 0.1
+}
+E-puck {
+  translation -0.437209 -0.455683 -0.000112527
+  rotation 0 0 1 1.5708
+  controller "PID_wall_follower"
+  groundSensorsSlot [
+    E-puckGroundSensors {
+    }
+  ]
 }

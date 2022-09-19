@@ -10,24 +10,28 @@
 #include <webots/robot.h>
 
 #include <webots/distance_sensor.h>
+#include <webots/light_sensor.h>
 #include <webots/motor.h>
 
 #define TIME_STEP 1
 #define BASE_SPEED 2.64
 #define DISTANCE_SENSORS_NUMBER 8
+#define LIGHT_SENSORS_NUMBER 8
 #define MOTORS_NUMBER 2
 
 static const char *distance_sensors_names[DISTANCE_SENSORS_NUMBER] = {"ps0", "ps1", "ps2", "ps3", "ps4", "ps5", "ps6", "ps7"};
+static const char *light_sensors_names[LIGHT_SENSORS_NUMBER] = {"ls0", "ls1", "ls2", "ls3", "ls4", "ls5", "ls6", "ls7"};
 static const char *motors_names[MOTORS_NUMBER] = {"left wheel motor","right wheel motor"};
 //--------------------------------------------------------------------// PID VAR
 double error = 0,lastError = 0, totalError, deltaError;
-double setPoint = 99.50, controlSignal;
-double KP_Control, KI_Control, KD_Control, KP = 95, KI = 0.00001, KD = 1;
+double setPoint = 76, controlSignal;
+double KP_Control, KI_Control, KD_Control, KP = 300, KI = 0.1, KD = 1;
 //--------------------------------------------------------------------//
 
 double constrainControl(double inputValue,int minValue, int maxValue);
 double map(double input, double inputMin, double inputMax, double outputMin, double outputMax);
 double readSensor(int x);
+double readLightSensor(int x);
 double averageSensor(void);
 
 void printSensor(void);
@@ -111,6 +115,16 @@ double readSensor(int x){
 
 }
 
+double readLightSensor(int x){
+
+  WbDeviceTag light_sensors[x];
+  light_sensors[x] = wb_robot_get_device(light_sensors_names[x]);
+  wb_light_sensor_enable(light_sensors[x], TIME_STEP);
+
+  return wb_light_sensor_get_value(light_sensors[x]);
+
+}
+
 double averageSensor(void){
 
   double averageVal = 0;
@@ -131,6 +145,9 @@ void printSensor(void){
 
   for(int x = 0; x < DISTANCE_SENSORS_NUMBER; x++){
     printf("Sensor [%d] : %f\n", x, readSensor(x));
+  }
+  for(int x = 0; x < LIGHT_SENSORS_NUMBER; x++){
+    printf("Sensor light [%d] : %f\n", x, readLightSensor(x));
   }
   printf("Average value : %f\n", averageSensor());
   printf("\n");
