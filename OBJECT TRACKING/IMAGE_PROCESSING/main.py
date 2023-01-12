@@ -4,7 +4,7 @@ import numpy as np
 import serial
 import time 
 
-face_data = cv.CascadeClassifier('/home/alimsatria/Documents/MATERI KULIAH/ROBOTIKA/IMAGE_PROCESSING/trained_data/haarcascade_frontalcatface.xml')
+face_data = cv.CascadeClassifier('/home/alimsatria/Documents/MATERI KULIAH/ROBOTIKA/OBJECT TRACKING/IMAGE_PROCESSING/trained_data/haarcascade_frontalcatface.xml')
 video = cv.VideoCapture(2)
 
 arduino = serial.Serial(port = '/dev/ttyUSB0', baudrate = 9600, timeout=1)
@@ -20,7 +20,7 @@ while(1) :
     frame = cv.flip(frame,1)
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-    face_detection = face_data.detectMultiScale(gray, 1.5, 3)
+    face_detection = face_data.detectMultiScale(gray, 3, 2)
 
     for (x,y,w,h) in face_detection :
         cv.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
