@@ -36,11 +36,11 @@ typedef struct{
 typedef struct{
 
   float feedback = 0;
-  float setPoint = 90;
+  float setPoint = 0;
 
-  float KP = 15;
-  float KI = 0.05;
-  float KD = 2;
+  float KP = 0;
+  float KI = 0;
+  float KD = 0;
 
   float KPValue = 0;
   float KIValue = 0;
@@ -52,8 +52,8 @@ typedef struct{
   float totalError = 0;
   float deltaError = 0;
 
-  int maxControl = 90;
-  int minControl = -90;
+  int maxControl = 100;
+  int minControl = -100;
 
   int controlSignal =0;
 
@@ -72,11 +72,11 @@ float mapFloat(float x, float in_min, float in_max, float out_min, float out_max
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-// unsigned long t = 0;
+unsigned long t = 0;
 int period = 50;
 
-int control_x = 86;
-int control_y = 100;
+int control_x = 1477;  // 86 degree ==> 1477 pulse width
+int control_y = 1555;  // 100 degree ==> 1555 pulse width
 
 void setup(){
 
@@ -87,99 +87,127 @@ void setup(){
   servo[0].attach(10); // servo sumbu x
   servo[1].attach(9);  // servo sumbu y
 
-  servo[0].write(control_x); // x
-  servo[1].write(control_y); // y
+  servo[0].writeMicroseconds(control_x); // x
+  servo[1].writeMicroseconds(control_y); // y
 
-  pid[0].KP = 15;
-  pid[0].KI = 0.05;
-  pid[0].KD = 2;
+  pid[0].KP = 3.0;
+  pid[0].KI = 0.0001;
+  pid[0].KD = 1.0;
 
-  pid[1].KP = 5;
-  pid[1].KI = 0.01;
-  pid[1].KD = 2;
+  pid[1].KP = 3.0;
+  pid[1].KI = 0.0001;
+  pid[1].KD = 1.0;
+
+  pid[0].setPoint = 1477;
+  pid[1].setPoint = 1555;
+
+  lcd.setCursor(4,0);
+  lcd.print("KELOMPOK");
+  lcd.setCursor(3,1);
+  lcd.print("INDEPENDEN");
 
 }
 
 void loop(){
 
-  if(Serial.available() > 0){
+  if(millis() - t >= period){
 
-    READ_DATA_UNTIL('\n');
-    data.replace(',','.');
-    parseString();
+    t += period;
 
-    feedback.x = DATA_STR(0).toFloat();
-    feedback.y = DATA_STR(1).toFloat();
+    if(Serial.available() > 0){
 
-    feedback.sum_x = 0;
-    feedback.sum_y = 0;
+      READ_DATA_UNTIL('\n');
+      data.replace(',','.');
+      parseString();
 
-    for(int i = 0; i < N; i++){
-      feedback.sum_x += feedback.x;
-      feedback.sum_y += feedback.y;
+      feedback.x = DATA_STR(0).toFloat();
+      feedback.y = DATA_STR(1).toFloat();
+
+      feedback.sum_x = 0;
+      feedback.sum_y = 0;
+
+      for(int i = 0; i < N; i++){
+        feedback.sum_x += feedback.x;
+        feedback.sum_y += feedback.y;
+      }
+
+      feedback.average_x = feedback.sum_x / N;
+      feedback.average_y = feedback.sum_y / N;
+
     }
 
-    feedback.average_x = feedback.sum_x / N;
-    feedback.average_y = feedback.sum_y / N;
+    if(feedback.average_x !=0 || feedback.average_y !=0){
 
+      pid[0].feedback = mapFloat(feedback.average_x,0,640,1000,2000);
+      pid[1].feedback = mapFloat(feedback.average_y,0,480,2000,1000);
+
+      pid[0].error = pid[0].setPoint - pid[0].feedback;
+      pid[1].error = pid[1].setPoint - pid[1].feedback;
+
+      pid[0].totalError += pid[0].error; //integral pid servo 1
+      pid[1].totalError += pid[1].error; //integral pid servo 2
+    
+      if(pid[0].totalError >= pid[0].maxControl) //anti-wind-up servo 1
+        pid[0].totalError = pid[0].maxControl;
+      else if(pid[0].totalError <= pid[0].minControl)
+        pid[0].totalError = pid[0].minControl;
+      
+      if(pid[1].totalError >= pid[1].maxControl) //anti-wind-up servo 2
+        pid[1].totalError = pid[1].maxControl;
+      else if(pid[1].totalError <= pid[1].minControl)
+        pid[1].totalError = pid[1].minControl;
+      
+      pid[0].deltaError = pid[0].error - pid[0].lastError; //differential servo 1
+      pid[1].deltaError = pid[1].error - pid[1].lastError; //differential servo 2
+
+      pid[0].KPValue = (pid[0].KP / 100) * pid[0].error;
+      pid[0].KIValue = (pid[0].KI / 100) * pid[0].totalError * timesampling;
+      pid[0].KDValue = (pid[0].KD / timesampling) * pid[0].deltaError;
+
+      pid[1].KPValue = (pid[1].KP / 100) * pid[1].error;
+      pid[1].KIValue = (pid[1].KI / 100) * pid[1].totalError * timesampling;
+      pid[1].KDValue = (pid[1].KD / timesampling) * pid[1].deltaError;
+
+      pid[0].controlSignal = pid[0].KPValue + pid[0].KIValue + pid[0].KDValue;
+      pid[1].controlSignal = pid[1].KPValue + pid[1].KIValue + pid[1].KDValue;
+
+      if(pid[0].controlSignal >= pid[0].maxControl) //limiter pid servo 1
+        pid[0].controlSignal = pid[0].maxControl;
+      else if(pid[0].controlSignal <= pid[0].minControl)
+        pid[0].controlSignal = pid[0].minControl;
+      
+      if(pid[1].controlSignal >= pid[1].maxControl) //limiter pid servo 1
+        pid[1].controlSignal = pid[1].maxControl;
+      else if(pid[1].controlSignal <= pid[1].minControl)
+        pid[1].controlSignal = pid[1].minControl;
+      
+      control_x = control_x + pid[0].controlSignal;
+      control_y = control_y + pid[1].controlSignal;
+
+      if(control_x >= 2000)
+        control_x = 2000;
+      else if (control_x <= 1000)
+        control_x = 1000;
+
+      if(control_y >= 2000)
+        control_y = 2000;
+      else if (control_y <= 1000)
+        control_y = 1000;
+      
+
+      servo[0].writeMicroseconds(mapFloat(control_x,1000,2000,2000,1000));
+      servo[1].writeMicroseconds(control_y);
+
+      pid[0].lastError = pid[0].error;
+      pid[1].lastError = pid[1].error;
+
+      lcd.setCursor(2,0);
+      lcd.print("PV_X:");
+      lcd.print(pid[0].feedback);
+      lcd.setCursor(2,1);
+      lcd.print("PV_Y:");
+      lcd.print(pid[1].feedback);
+
+    }
   }
-
-  if(feedback.average_x !=0 || feedback.average_y !=0){
-
-    // control_x = mapFloat(feedback.average_x,102,525,0,180);
-    // control_y = constrain(mapFloat(feedback.average_y,97,378,180,0),100,180);
-
-    pid[0].feedback = mapFloat(feedback.average_x,0,640,0,180);
-    pid[1].feedback = mapFloat(feedback.average_y,0,480,180,0);
-
-    pid[0].error = pid[0].setPoint - pid[0].feedback;
-    pid[1].error = pid[1].setPoint - pid[1].feedback;
-
-    pid[0].totalError += pid[0].error; //integral pid servo 1
-    pid[1].totalError += pid[1].error; //integral pid servo 2
-  
-    if(pid[0].totalError >= pid[0].maxControl) //anti-wind-up servo 1
-      pid[0].totalError = pid[0].maxControl;
-    else if(pid[0].totalError <= pid[0].minControl)
-      pid[0].totalError = pid[0].minControl;
-    
-    if(pid[1].totalError >= pid[1].maxControl) //anti-wind-up servo 2
-      pid[1].totalError = pid[1].maxControl;
-    else if(pid[1].totalError <= pid[1].minControl)
-      pid[1].totalError = pid[1].minControl;
-    
-    pid[0].deltaError = pid[0].error - pid[0].lastError; //differential servo 1
-    pid[1].deltaError = pid[1].error - pid[1].lastError; //differential servo 2
-
-    pid[0].KPValue = (pid[0].KP / 100) * pid[0].error;
-    pid[0].KIValue = (pid[0].KI / 100) * pid[0].totalError * timesampling;
-    pid[0].KDValue = (pid[0].KD / timesampling) * pid[0].deltaError;
-
-    pid[1].KPValue = (pid[1].KP / 100) * pid[1].error;
-    pid[1].KIValue = (pid[1].KI / 100) * pid[1].totalError * timesampling;
-    pid[1].KDValue = (pid[1].KD / timesampling) * pid[1].deltaError;
-
-    pid[0].controlSignal = pid[0].KPValue + pid[0].KIValue + pid[0].KDValue;
-    pid[1].controlSignal = pid[1].KPValue + pid[1].KIValue + pid[1].KDValue;
-
-    if(pid[0].controlSignal >= pid[0].maxControl) //limiter pid servo 1
-      pid[0].controlSignal = pid[0].maxControl;
-    else if(pid[0].controlSignal <= pid[0].minControl)
-      pid[0].controlSignal = pid[0].minControl;
-    
-    if(pid[1].controlSignal >= pid[1].maxControl) //limiter pid servo 1
-      pid[1].controlSignal = pid[1].maxControl;
-    else if(pid[1].controlSignal <= pid[1].minControl)
-      pid[1].controlSignal = pid[1].minControl;
-
-    servo[0].write(mapFloat(pid[0].controlSignal,-90,90,180,0));
-    servo[1].write(mapFloat(pid[1].controlSignal,-90,90,0,180));
-
-    pid[0].lastError = pid[0].error;
-    pid[1].lastError = pid[1].error;
-
-  }
-
-  delay(period);
-
 }
